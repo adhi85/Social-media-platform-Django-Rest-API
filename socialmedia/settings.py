@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7crjh9f+$itczh4dfc#2l4#0tvj&twgcpb6+9hf_m0+c)j7_ul'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -87,11 +88,11 @@ WSGI_APPLICATION = 'socialmedia.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'socialmedia',
-        'USER': 'postgres',
-        'PASSWORD': 'muthanikatt',
-        'HOST': 'localhost',
-        'PORT': 5433 
+        'NAME': 'socialmedia_5sw3',
+        'USER': 'socialmedia_5sw3_user',
+        'PASSWORD': 'fl2sPUyA7vLTUgNBjLKaTnecCFKr8F2A',
+        'HOST': 'django-insecure-7crjh9f+$itczh4dfc#2l4#0tvj&twgcpb6+9hf_m0+c)j7_ul',
+        'PORT': 5432 
     }
 }
 
