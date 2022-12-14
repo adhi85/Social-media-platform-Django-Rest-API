@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
+
 from .serializer import FollowSerializer , PostSerializer , LikeSerializer, CommentSerializer
 from .models import Follow, Post , Like, Comment
 from rest_framework.response import Response
@@ -8,11 +9,39 @@ from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, get_object_or_404, CreateAPIView, ListAPIView
 from rest_framework.views import APIView
+from rest_framework.decorators import permission_classes,api_view
+from rest_framework.permissions import AllowAny
 
-from .permissions import IsOwnerOrReadOnly, CreateOrDestroyView
+from . helping import IsOwnerOrReadOnly, CreateOrDestroyView
 
 from django.http import JsonResponse
 # Create your views here.
+
+@api_view(['GET'])
+@permission_classes((AllowAny, ))
+def Routes(request):
+    routes = [
+        'GET /api/',
+        'All OPERATIONS',
+        'POST /api/authenticate/ : Generate the JWT token for the user ',
+        'POST /api/follow/{id} authenticated user would follow user with {id}',
+        'POST /api/unfollow/{id} authenticated user will unfollow a user with {id}',
+        'GET /api/user authenticate the request and return the respective user profile.',
+        'POST api/posts/ add a new post created by the authenticated user.',
+        '  -> Input: Title, Description ' 
+        '=>RETURN: Post-ID, Title, Description, Created Time(UTC).',
+        'DELETE api/posts/{id}  delete post with {id} created by the authenticated user.',
+        'POST /api/like/{id}  like the post with {id} by the authenticated user.',
+        'POST /api/unlike/{id}  unlike the post with {id} by the authenticated user.',
+        'POST /api/comment/{id} add comment for post with {id} by the authenticated user.',
+            '- Input: Comment'
+            '- Return: Comment-ID',
+        "GET api/posts/{id}  return a single post with {id} populated with its number of likes and comments",
+        "GET /api/all_posts  return all posts created by authenticated user sorted by post time",
+        
+
+    ]
+    return Response(routes)
 
 def home(request):
     return HttpResponse("<h1>Home </h1> <hr>")
@@ -23,7 +52,6 @@ class FollowUserView(CreateAPIView, mixins.DestroyModelMixin):
     post: follow user with <user_id>
     
     """
-    # lookup_field = 'user_id'  # not needed here but can be useful to replace 'pk' with something else
     serializer_class = FollowSerializer
     queryset = Follow.objects.all()
 
@@ -54,7 +82,7 @@ class UnfollowUserView(CreateAPIView,mixins.DestroyModelMixin):
 
 class GetUserView(APIView):
     """
-    get: get all users the logged in user follows
+    get: authenticate the request and return the respective user profile.
     """
     def get(self,request):
         following = Follow.objects.filter(follower=request.user)
@@ -84,7 +112,6 @@ class CreatePostView(CreateAPIView):
 class GetUpdateDeletePostView(RetrieveUpdateDestroyAPIView):
     """
     get: get a single specific post. (Logged in users only)
-    put: edit a post (owning user only).
     delete: delete a post (owning user only).
     """
 
@@ -111,6 +138,9 @@ class LikePostView(CreateOrDestroyView):
 
 
 class UnlikePostView(CreateOrDestroyView):
+    """
+    post: unlike post
+    """
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=self.kwargs.get('pk'))
         like = get_object_or_404(Like, user=self.request.user, post=post)
@@ -133,12 +163,12 @@ class CommentPostView(CreateOrDestroyView):
 
 class ListAllPostsView(ListAPIView):
     """
-    get: list all posts of a user
+    get: list all posts of authenticated user
     """
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
     def get_queryset(self):
-        print(self.request.GET)  # this would print all querystring params
+        print(self.request.GET)  
         posts = self.queryset.filter(user__id=self.request.user.id)
         return posts.order_by('-created')
