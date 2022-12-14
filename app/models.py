@@ -29,7 +29,7 @@ class Follow(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=30, blank=True)
+    title = models.CharField(max_length=30,null=False, blank=False)
     description = models.CharField(max_length=512, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

@@ -32,7 +32,8 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'title', 'description', 'created', 'user', 'likes','comments']
         read_only_fields = ['id', 'user', 'created']
-
+        extra_kwargs = {'title': {'required': True, 'allow_blank': False}}
+        
     def get_likes(self, post):
         likes = post.likes.all()
         return LikeSerializer(likes, many=True).data
