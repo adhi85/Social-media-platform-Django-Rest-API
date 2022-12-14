@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'socialmedia.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'socialmedia',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'muthanikatt',
-        'HOST': 'localhost',
-        'PORT': 5433 
+        'PASSWORD': 'kQQ7RyG4YXSa2eXxlkVI',
+        'HOST': 'containers-us-west-165.railway.app',
+        'PORT': 5608 
     }
 }
 
