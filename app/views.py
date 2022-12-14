@@ -23,7 +23,7 @@ def Routes(request):
     routes = [
         'GET /api/',
         'All OPERATIONS',
-        'POST /api/authenticate/ : Generate the JWT token for the user ',
+        'POST /api/authenticate/ : Generate the JWT token for the user GIVE EMAIL AS VALUE FOR USERNAME ',
         'POST /api/follow/{id} authenticated user would follow user with {id}',
         'POST /api/unfollow/{id} authenticated user will unfollow a user with {id}',
         'GET /api/user authenticate the request and return the respective user profile.',
